@@ -26,9 +26,9 @@ void TopicCommand::execute(Client *client, std::vector<std::string> arguments)
         return;
     }
 
-    // ==========================================
+
     // MODE A: VIEW TOPIC (No topic provided)
-    // ==========================================
+
     if (arguments.size() == 1)
     {
         if (chan->getTopic().empty())
@@ -38,13 +38,13 @@ void TopicCommand::execute(Client *client, std::vector<std::string> arguments)
         return;
     }
 
-    // ==========================================
+
     // MODE B: CHANGE TOPIC (Topic provided)
-    // ==========================================
+
 
     // 4. The Operator Security Check (The most important part!)
     // If the channel has "+t" mode (Topic Lock), ONLY Operators can change it.
-    if (chan->isTopicProtected() && !chan->is_oper(client))
+    if (chan->isTopicProtected() && client != chan->getAdmin() && !chan->is_oper(client))
     {
         client->reply(ERR_CHANOPRIVSNEEDED(client->getNickName(), channelName));
         return;
